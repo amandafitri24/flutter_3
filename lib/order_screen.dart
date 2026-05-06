@@ -43,7 +43,6 @@ class _OrderScreenState extends State<OrderScreen>
   void initState() {
     super.initState();
 
-    /// PAGE ANIMATION
     _pageController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 600),
@@ -61,7 +60,6 @@ class _OrderScreenState extends State<OrderScreen>
 
     _pageController.forward();
 
-    /// BUTTON
     _btnController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 100),
@@ -106,9 +104,14 @@ class _OrderScreenState extends State<OrderScreen>
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
     final isMobile = width < 700;
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
+      extendBody: true,
+      extendBodyBehindAppBar: true,
+
       body: FadeTransition(
         opacity: _fade,
         child: SlideTransition(
@@ -130,7 +133,7 @@ class _OrderScreenState extends State<OrderScreen>
                 ),
               ),
 
-              /// SOFT BLUR
+              /// BLUR
               Positioned.fill(
                 child: BackdropFilter(
                   filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
@@ -138,368 +141,271 @@ class _OrderScreenState extends State<OrderScreen>
                 ),
               ),
 
-              /// GLOW EFFECT
-              Positioned(
-                top: -60,
-                left: -40,
-                child: _glow(160),
-              ),
-              Positioned(
-                bottom: -80,
-                right: -50,
-                child: _glow(200),
-              ),
+              /// GLOW
+              Positioned(top: -60, left: -40, child: _glow(160)),
+              Positioned(bottom: -80, right: -50, child: _glow(200)),
 
               /// CONTENT
               SafeArea(
+                bottom: false,
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: isMobile ? 16 : 24,
-                    vertical: 16,
-                  ),
-                  child: Center(
-                    child: ConstrainedBox(
-                      constraints:
-                          const BoxConstraints(maxWidth: 520),
-                      child: Column(
-                        children: [
-                          /// HEADER
-                          Row(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: height, // 🔥 FULL HEIGHT
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: isMobile ? 16 : 24,
+                        vertical: 16,
+                      ),
+                      child: Center(
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 520),
+                          child: Column(
                             children: [
-                              _circleBtn(
-                                  () => Navigator.pop(context)),
-                              Expanded(
-                                child: Center(
-                                  child: Text(
-                                    "Order Details",
-                                    style:
-                                        GoogleFonts.playfairDisplay(
-                                      color: goldColor,
-                                      fontSize: 18,
-                                      fontWeight:
-                                          FontWeight.w600,
+                              /// HEADER
+                              Row(
+                                children: [
+                                  _circleBtn(() => Navigator.pop(context)),
+                                  Expanded(
+                                    child: Center(
+                                      child: Text(
+                                        "Order Flower",
+                                        style: GoogleFonts.playfairDisplay(
+                                          color: goldColor,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
+                                  const SizedBox(width: 36),
+                                ],
                               ),
-                              const SizedBox(width: 36),
-                            ],
-                          ),
 
-                          const SizedBox(height: 22),
+                              const SizedBox(height: 22),
 
-                          /// MAIN CARD
-                          ClipRRect(
-                            borderRadius:
-                                BorderRadius.circular(20),
-                            child: BackdropFilter(
-                              filter: ImageFilter.blur(
-                                  sigmaX: 14, sigmaY: 14),
-                              child: Container(
-                                padding:
-                                    const EdgeInsets.all(18),
-                                decoration: BoxDecoration(
-                                  color: Colors.white
-                                      .withOpacity(0.04),
-                                  borderRadius:
-                                      BorderRadius.circular(
-                                          20),
-                                  border: Border.all(
-                                    color: Colors.white
-                                        .withOpacity(0.06),
-                                  ),
-                                ),
-                                child: Column(
-                                  children: [
-                                    /// IMAGE
-                                    ConstrainedBox(
-                                      constraints:
-                                          const BoxConstraints(
-                                              maxHeight:
-                                                  160),
-                                      child: Hero(
-                                        tag: widget.image,
-                                        child: Image.asset(
-                                          "assets/assets/${widget.image}",
-                                          fit: BoxFit.contain,
+                              /// CARD
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: BackdropFilter(
+                                  filter: ImageFilter.blur(
+                                      sigmaX: 14, sigmaY: 14),
+                                  child: Container(
+                                    padding: const EdgeInsets.all(18),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white.withOpacity(0.04),
+                                      borderRadius: BorderRadius.circular(20),
+                                      border: Border.all(
+                                        color: Colors.white.withOpacity(0.06),
+                                      ),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        ConstrainedBox(
+                                          constraints: const BoxConstraints(
+                                              maxHeight: 160),
+                                          child: Hero(
+                                            tag: widget.image,
+                                            child: Image.asset(
+                                              "assets/assets/${widget.image}",
+                                              fit: BoxFit.contain,
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                    ),
 
-                                    const SizedBox(height: 14),
+                                        const SizedBox(height: 14),
 
-                                    /// TITLE
-                                    Text(
-                                      widget.title,
-                                      textAlign:
-                                          TextAlign.center,
-                                      maxLines: 2,
-                                      overflow:
-                                          TextOverflow.ellipsis,
-                                      style: GoogleFonts
-                                          .playfairDisplay(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                        fontWeight:
-                                            FontWeight.w600,
-                                      ),
-                                    ),
-
-                                    const SizedBox(height: 6),
-
-                                    /// PRICE
-                                    Text(
-                                      formatRupiah(
-                                          getPrice()),
-                                      style:
-                                          GoogleFonts.roboto(
-                                        color: goldColor,
-                                        fontSize: 15,
-                                      ),
-                                    ),
-
-                                    const SizedBox(height: 18),
-
-                                    /// QTY
-                                    Container(
-                                      padding:
-                                          const EdgeInsets
-                                              .symmetric(
-                                              horizontal: 14,
-                                              vertical: 12),
-                                      decoration:
-                                          BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius
-                                                .circular(14),
-                                        color: Colors.white
-                                            .withOpacity(
-                                                0.05),
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment
-                                                .spaceBetween,
-                                        children: [
-                                          Text(
-                                            "Quantity",
-                                            style: GoogleFonts
-                                                .roboto(
-                                              color: Colors
-                                                  .white70,
-                                              fontSize: 13,
-                                            ),
+                                        Text(
+                                          widget.title,
+                                          textAlign: TextAlign.center,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: GoogleFonts.playfairDisplay(
+                                            color: Colors.white,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w600,
                                           ),
-                                          Row(
-                                            children: [
-                                              _qtyBtn(
-                                                  Icons.remove,
-                                                  () {
-                                                if (qty >
-                                                    1) {
-                                                  setState(() =>
-                                                      qty--);
-                                                }
-                                              }),
-                                              const SizedBox(
-                                                  width:
-                                                      12),
-                                              AnimatedSwitcher(
-                                                duration:
-                                                    const Duration(
-                                                        milliseconds:
-                                                            200),
-                                                child: Text(
-                                                  "$qty",
-                                                  key: ValueKey(
-                                                      qty),
-                                                  style: GoogleFonts
-                                                      .roboto(
-                                                    color: Colors
-                                                        .white,
-                                                    fontSize:
-                                                        16,
-                                                    fontWeight:
-                                                        FontWeight
-                                                            .w600,
-                                                  ),
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                  width:
-                                                      12),
-                                              _qtyBtn(
-                                                  Icons.add,
-                                                  () {
-                                                setState(() =>
-                                                    qty++);
-                                              },
-                                                  isPrimary:
-                                                      true),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-
-                                    const SizedBox(height: 18),
-
-                                    /// TOTAL
-                                    Container(
-                                      width: double.infinity,
-                                      padding:
-                                          const EdgeInsets
-                                              .symmetric(
-                                              vertical: 14),
-                                      decoration:
-                                          BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius
-                                                .circular(14),
-                                        border: Border.all(
-                                          color: goldColor
-                                              .withOpacity(
-                                                  0.3),
                                         ),
-                                      ),
-                                      child: Column(
-                                        children: [
-                                          Text(
-                                            "Total Payment",
-                                            style: GoogleFonts
-                                                .roboto(
-                                              color: Colors
-                                                  .white60,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                              height: 4),
-                                          Text(
-                                            formatRupiah(
-                                                total),
-                                            style: GoogleFonts
-                                                .roboto(
-                                              color:
-                                                  goldColor,
-                                              fontSize: 18,
-                                              fontWeight:
-                                                  FontWeight
-                                                      .w600,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
 
-                                    const SizedBox(height: 22),
+                                        const SizedBox(height: 6),
 
-                                    /// BUTTON
-                                    GestureDetector(
-                                      onTapDown: (_) =>
-                                          _btnController
-                                              .forward(),
-                                      onTapUp: (_) {
-                                        _btnController
-                                            .reverse();
-
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (_) =>
-                                                CheckoutScreen(
-                                              image:
-                                                  widget.image,
-                                              title:
-                                                  widget.title,
-                                              price:
-                                                  widget.price,
-                                              qty: qty,
-                                              fullName:
-                                                  widget
-                                                      .fullName,
-                                              phone: widget
-                                                  .phone,
-                                              address:
-                                                  widget
-                                                      .address,
-                                            ),
+                                        Text(
+                                          formatRupiah(getPrice()),
+                                          style: GoogleFonts.roboto(
+                                            color: goldColor,
+                                            fontSize: 15,
                                           ),
-                                        );
-                                      },
-                                      onTapCancel: () =>
-                                          _btnController
-                                              .reverse(),
-                                      child:
-                                          ScaleTransition(
-                                        scale: _scale,
-                                        child: Container(
-                                          padding:
-                                              const EdgeInsets
-                                                  .symmetric(
-                                                  vertical:
-                                                      12),
-                                          width: double.infinity,
-                                          decoration:
-                                              BoxDecoration(
+                                        ),
+
+                                        const SizedBox(height: 18),
+
+                                        /// QTY
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 14, vertical: 12),
+                                          decoration: BoxDecoration(
                                             borderRadius:
-                                                BorderRadius
-                                                    .circular(
-                                                        12),
-                                            gradient:
-                                                LinearGradient(
-                                              colors: [
-                                                goldColor
-                                                    .withOpacity(
-                                                        0.95),
-                                                goldColor
-                                                    .withOpacity(
-                                                        0.75),
-                                              ],
-                                            ),
+                                                BorderRadius.circular(14),
+                                            color:
+                                                Colors.white.withOpacity(0.05),
                                           ),
                                           child: Row(
                                             mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .center,
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
-                                              const Icon(
-                                                Icons
-                                                    .shopping_bag_outlined,
-                                                color: Color(
-                                                    0xFF120707),
-                                                size: 18,
-                                              ),
-                                              const SizedBox(
-                                                  width:
-                                                      8),
                                               Text(
-                                                "PLACE ORDER",
-                                                style: GoogleFonts
-                                                    .roboto(
-                                                  color: const Color(
-                                                      0xFF120707),
-                                                  fontWeight:
-                                                      FontWeight
-                                                          .w600,
-                                                  fontSize:
-                                                      13,
+                                                "Quantity",
+                                                style: GoogleFonts.roboto(
+                                                  color: Colors.white70,
+                                                  fontSize: 13,
+                                                ),
+                                              ),
+                                              Row(
+                                                children: [
+                                                  _qtyBtn(Icons.remove, () {
+                                                    if (qty > 1) {
+                                                      setState(() => qty--);
+                                                    }
+                                                  }),
+                                                  const SizedBox(width: 12),
+                                                  Text(
+                                                    "$qty",
+                                                    style: GoogleFonts.roboto(
+                                                      color: Colors.white,
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(width: 12),
+                                                  _qtyBtn(Icons.add, () {
+                                                    setState(() => qty++);
+                                                  }, isPrimary: true),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+
+                                        const SizedBox(height: 18),
+
+                                        /// TOTAL
+                                        Container(
+                                          width: double.infinity,
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 14),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(14),
+                                            border: Border.all(
+                                              color:
+                                                  goldColor.withOpacity(0.3),
+                                            ),
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                "Total Payment",
+                                                style: GoogleFonts.roboto(
+                                                  color: Colors.white60,
+                                                  fontSize: 12,
+                                                ),
+                                              ),
+                                              const SizedBox(height: 4),
+                                              Text(
+                                                formatRupiah(total),
+                                                style: GoogleFonts.roboto(
+                                                  color: goldColor,
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w600,
                                                 ),
                                               ),
                                             ],
                                           ),
                                         ),
-                                      ),
+
+                                        const SizedBox(height: 22),
+
+                                        /// BUTTON
+                                        GestureDetector(
+                                          onTapDown: (_) =>
+                                              _btnController.forward(),
+                                          onTapUp: (_) {
+                                            _btnController.reverse();
+
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (_) => CheckoutScreen(
+                                                  image: widget.image,
+                                                  title: widget.title,
+                                                  price: widget.price,
+                                                  qty: qty,
+                                                  fullName: widget.fullName,
+                                                  phone: widget.phone,
+                                                  address: widget.address,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                          onTapCancel: () =>
+                                              _btnController.reverse(),
+                                          child: ScaleTransition(
+                                            scale: _scale,
+                                            child: Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 12),
+                                              width: double.infinity,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                                gradient: LinearGradient(
+                                                  colors: [
+                                                    goldColor.withOpacity(0.95),
+                                                    goldColor.withOpacity(0.75),
+                                                  ],
+                                                ),
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  const Icon(
+                                                    Icons.shopping_bag_outlined,
+                                                    color: Color(0xFF120707),
+                                                    size: 18,
+                                                  ),
+                                                  const SizedBox(width: 8),
+                                                  Text(
+                                                    "PLACE ORDER",
+                                                    style:
+                                                        GoogleFonts.roboto(
+                                                      color:
+                                                          const Color(0xFF120707),
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 13,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
 
-                          const SizedBox(height: 20),
-                        ],
+                              /// 🔥 PENTING: isi bawah biar tidak putih
+                              const SizedBox(height: 120),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -535,8 +441,7 @@ class _OrderScreenState extends State<OrderScreen>
       {bool isPrimary = false}) {
     return GestureDetector(
       onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
+      child: Container(
         width: 30,
         height: 30,
         decoration: BoxDecoration(

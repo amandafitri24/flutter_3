@@ -72,15 +72,19 @@ class _DetailScreenState extends State<DetailScreen>
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
     final isMobile = width < 700;
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
+      extendBody: true,
+      extendBodyBehindAppBar: true,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: _buildButton(),
 
       body: Stack(
         children: [
-          /// BACKGROUND IMAGE
+          /// ================= BACKGROUND =================
           Positioned.fill(
             child: Image.asset(
               "assets/assets/bg.jpg",
@@ -95,7 +99,7 @@ class _DetailScreenState extends State<DetailScreen>
             ),
           ),
 
-          /// SOFT BLUR
+          /// BLUR
           Positioned.fill(
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
@@ -103,16 +107,20 @@ class _DetailScreenState extends State<DetailScreen>
             ),
           ),
 
-          /// CONTENT
+          /// ================= CONTENT =================
           SafeArea(
+            bottom: false,
             child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(
-                horizontal: isMobile ? 16 : 24,
-                vertical: 16,
-              ),
-              child: Center(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 520),
+              physics: const BouncingScrollPhysics(),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: height, // 🔥 BIKIN FULL KE BAWAH
+                ),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: isMobile ? 16 : 24,
+                    vertical: 16,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -255,7 +263,8 @@ class _DetailScreenState extends State<DetailScreen>
                         ),
                       ),
 
-                      const SizedBox(height: 90),
+                      /// 🔥 SPACER AGAR FULL KE BAWAH TANPA PUTIH
+                      const SizedBox(height: 120),
                     ],
                   ),
                 ),
@@ -267,7 +276,7 @@ class _DetailScreenState extends State<DetailScreen>
     );
   }
 
-  /// BUTTON (FINAL REFINED)
+  /// BUTTON
   Widget _buildButton() {
     return GestureDetector(
       onTapDown: (_) => _btnController.forward(),
@@ -285,34 +294,18 @@ class _DetailScreenState extends State<DetailScreen>
           ),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-
             gradient: LinearGradient(
               colors: [
                 goldColor.withOpacity(0.95),
                 goldColor.withOpacity(0.75),
               ],
             ),
-
-            border: Border.all(
-              color: goldColor.withOpacity(0.4),
-            ),
-
-            boxShadow: [
-              BoxShadow(
-                color: goldColor.withOpacity(0.25),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
-              ),
-            ],
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(
-                Icons.shopping_bag_outlined,
-                color: Color(0xFF1A0F0F),
-                size: 18,
-              ),
+              const Icon(Icons.shopping_bag_outlined,
+                  color: Color(0xFF1A0F0F), size: 18),
               const SizedBox(width: 8),
               Text(
                 "MAKE ORDER",
@@ -320,7 +313,6 @@ class _DetailScreenState extends State<DetailScreen>
                   color: const Color(0xFF1A0F0F),
                   fontWeight: FontWeight.w600,
                   fontSize: 13,
-                  letterSpacing: 0.8,
                 ),
               ),
             ],
