@@ -115,7 +115,7 @@ class _FirstScreenState extends State<FirstScreen>
           /// BACKGROUND
           Positioned.fill(
             child: Image.asset(
-              'assets/bg.jpg',
+              "assets/assets/bg.jpg",
               fit: BoxFit.cover,
             ),
           ),
