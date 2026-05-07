@@ -203,7 +203,7 @@ class _RegisterScreenState extends State<RegisterScreen>
         children: [
           Positioned.fill(
             child: Image.asset(
-              'assets/bg.jpg',
+              'assets/assets/bg.jpg',
               fit: BoxFit.cover,
             ),
           ),

@@ -156,7 +156,7 @@ class _FirstScreenState extends State<FirstScreen>
                             ),
                           ),
                           Image.asset(
-                            'assets/logoA.png',
+                            'assets/assets/logoA.png',
                             width: 110,
                           ),
                         ],
