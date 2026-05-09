@@ -1,6 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'home_screen.dart';
+import 'home_screen.dart'; // Pastikan file ini sudah dibuat
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -54,7 +54,6 @@ class _RegisterScreenState extends State<RegisterScreen>
     super.dispose();
   }
 
-  /// ================= ELEGANT SNACKBAR =================
   void showElegantSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -68,34 +67,20 @@ class _RegisterScreenState extends State<RegisterScreen>
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
             child: Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               decoration: BoxDecoration(
                 color: const Color(0xCC1E1E1E),
                 borderRadius: BorderRadius.circular(18),
                 border: Border.all(color: const Color(0x66D4AF37)),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color(0x33000000),
-                    blurRadius: 12,
-                    offset: Offset(0, 6),
-                  )
-                ],
               ),
               child: Row(
                 children: [
-                  const Icon(
-                    Icons.notifications_active_outlined,
-                    color: Color(0xFFD4AF37),
-                  ),
+                  const Icon(Icons.notifications_active_outlined, color: Color(0xFFD4AF37)),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
                       message,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 13,
-                      ),
+                      style: const TextStyle(color: Colors.white, fontSize: 13),
                     ),
                   ),
                 ],
@@ -107,35 +92,25 @@ class _RegisterScreenState extends State<RegisterScreen>
     );
   }
 
-  /// ================= REGISTER FUNCTION =================
   void handleRegister() {
     final nama = namaController.text.trim();
     final hp = hpController.text.trim();
     final alamat = alamatController.text.trim();
 
-    /// ❌ EMPTY
     if (nama.isEmpty || hp.isEmpty || alamat.isEmpty) {
       showElegantSnackBar("Please fill in all fields");
       return;
     }
 
-    /// ❌ PHONE INVALID
     if (hp.length < 10) {
       showElegantSnackBar("Invalid phone number");
       return;
     }
 
-    /// ✅ SUCCESS
     showElegantSnackBar("Registration successful");
 
-    debugPrint("=== REGISTER DATA ===");
-    debugPrint("Nama    : $nama");
-    debugPrint("No HP   : $hp");
-    debugPrint("Alamat  : $alamat");
-    debugPrint("=====================");
-
-    /// DELAY BIAR USER LIAT NOTIFIKASI
     Future.delayed(const Duration(milliseconds: 900), () {
+      if (!mounted) return;
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(
@@ -153,19 +128,11 @@ class _RegisterScreenState extends State<RegisterScreen>
     });
   }
 
-  /// ================= INPUT FIELD =================
-  Widget inputField(
-      String label, String hint, TextEditingController controller) {
+  Widget inputField(String label, String hint, TextEditingController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: const TextStyle(
-            color: Colors.white70,
-            fontSize: 12,
-          ),
-        ),
+        Text(label, style: const TextStyle(color: Colors.white70, fontSize: 12)),
         const SizedBox(height: 6),
         TextField(
           controller: controller,
@@ -175,18 +142,14 @@ class _RegisterScreenState extends State<RegisterScreen>
             hintStyle: const TextStyle(color: Colors.white54),
             filled: true,
             fillColor: const Color(0x22FFFFFF),
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
               borderSide: BorderSide.none,
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
-              borderSide: const BorderSide(
-                color: Color(0xFFD4AF37),
-                width: 1.2,
-              ),
+              borderSide: const BorderSide(color: Color(0xFFD4AF37), width: 1.2),
             ),
           ),
         ),
@@ -203,17 +166,12 @@ class _RegisterScreenState extends State<RegisterScreen>
         children: [
           Positioned.fill(
             child: Image.asset(
-              'assets/assets/bg.jpg',
+              'assets/assets/bg.jpg', // Folder ganda sesuai strukturmu
               fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) => Container(color: Colors.black),
             ),
           ),
-
-          Positioned.fill(
-            child: Container(
-              color: const Color(0x99000000),
-            ),
-          ),
-
+          Positioned.fill(child: Container(color: const Color(0x99000000))),
           Center(
             child: SlideTransition(
               position: slideAnim,
@@ -226,18 +184,12 @@ class _RegisterScreenState extends State<RegisterScreen>
                     child: Container(
                       width: width * 0.85,
                       constraints: const BoxConstraints(maxWidth: 360),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 28,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
                       decoration: BoxDecoration(
                         color: const Color(0x22FFFFFF),
                         borderRadius: BorderRadius.circular(28),
-                        border: Border.all(
-                          color: const Color(0x44D4AF37),
-                        ),
+                        border: Border.all(color: const Color(0x44D4AF37)),
                       ),
-
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -250,52 +202,32 @@ class _RegisterScreenState extends State<RegisterScreen>
                               letterSpacing: 1.2,
                             ),
                           ),
-
                           const SizedBox(height: 25),
-
-                          inputField(
-                            "Full Name",
-                            "Enter your full name",
-                            namaController,
-                          ),
-
+                          inputField("Full Name", "Enter your full name", namaController),
                           const SizedBox(height: 16),
-
-                          inputField(
-                            "Phone Number",
-                            "Enter your phone number",
-                            hpController,
-                          ),
-
+                          inputField("Phone Number", "Enter your phone number", hpController),
                           const SizedBox(height: 16),
-
-                          inputField(
-                            "Full Address",
-                            "Enter your full address",
-                            alamatController,
-                          ),
-
+                          inputField("Full Address", "Enter your full address", alamatController),
                           const SizedBox(height: 28),
-
                           GestureDetector(
                             onTapDown: (_) => setState(() => pressed = true),
                             onTapUp: (_) => setState(() => pressed = false),
-                            onTapCancel: () =>
-                                setState(() => pressed = false),
+                            onTapCancel: () => setState(() => pressed = false),
                             onTap: handleRegister,
                             child: AnimatedContainer(
                               duration: const Duration(milliseconds: 120),
+                              // ✅ PERBAIKAN DI SINI:
+                              transform: Matrix4.diagonal3Values(
+                                pressed ? 0.97 : 1.0, 
+                                pressed ? 0.97 : 1.0, 
+                                1.0
+                              ),
                               transformAlignment: Alignment.center,
-                              transform: Matrix4.identity()
-                                ..scale(pressed ? 0.97 : 1),
                               height: 48,
                               width: double.infinity,
                               decoration: BoxDecoration(
                                 gradient: const LinearGradient(
-                                  colors: [
-                                    Color(0xFFD4AF37),
-                                    Color(0xFFB8962E),
-                                  ],
+                                  colors: [Color(0xFFD4AF37), Color(0xFFB8962E)],
                                 ),
                                 borderRadius: BorderRadius.circular(16),
                               ),

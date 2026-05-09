@@ -1,6 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'register_screen.dart';
+import 'register_screen.dart'; // Pastikan file ini sudah ada
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -110,27 +110,24 @@ class _LoginScreenState extends State<LoginScreen>
     final email = emailController.text.trim();
     final password = passwordController.text.trim();
 
-    /// ❌ EMPTY
+    /// ❌ VALIDASI KOSONG
     if (email.isEmpty || password.isEmpty) {
       showElegantSnackBar("Please fill in all fields");
       return;
     }
 
-    /// ❌ INVALID EMAIL
+    /// ❌ VALIDASI FORMAT EMAIL
     if (!email.contains("@")) {
       showElegantSnackBar("Invalid email format");
       return;
     }
 
-    /// ✅ SUCCESS
+    /// ✅ BERHASIL LOGIN
     showElegantSnackBar("Login successful");
 
-    debugPrint("=== LOGIN DATA ===");
-    debugPrint("Email    : $email");
-    debugPrint("Password : $password");
-    debugPrint("==================");
-
+    // Delay sebentar agar user bisa melihat snackbar
     Future.delayed(const Duration(milliseconds: 900), () {
+      if (!mounted) return;
       Navigator.push(
         context,
         PageRouteBuilder(
@@ -151,13 +148,18 @@ class _LoginScreenState extends State<LoginScreen>
     return Scaffold(
       body: Stack(
         children: [
+          // BACKGROUND IMAGE
           Positioned.fill(
             child: Image.asset(
-              'assets/assets/bg.jpg',
+              'assets/assets/bg.jpg', // Pastikan jalur folder ini benar
               fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Container(color: Colors.black); // Backup jika gambar tidak ketemu
+              },
             ),
           ),
 
+          // OVERLAY GELAP
           Positioned.fill(
             child: Container(
               color: const Color(0x99000000),
@@ -194,98 +196,71 @@ class _LoginScreenState extends State<LoginScreen>
                           )
                         ],
                       ),
-
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Center(
                             child: Text(
-                              "Login Amanda Flower Shop",
+                              "Amanda Flower Shop",
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: 22,
-                                fontWeight: FontWeight.w600,
+                                fontWeight: FontWeight.bold,
                                 color: Color(0xFFD4AF37),
                                 letterSpacing: 1.2,
                               ),
                             ),
                           ),
-
                           const SizedBox(height: 6),
-
                           const Center(
                             child: Text(
                               "Login to continue",
-                              textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: 13,
                                 color: Colors.white70,
                               ),
                             ),
                           ),
-
                           const SizedBox(height: 30),
 
+                          // EMAIL FIELD
                           const Text(
                             "Email",
-                            style: TextStyle(
-                              color: Colors.white70,
-                              fontSize: 12,
-                            ),
+                            style: TextStyle(color: Colors.white70, fontSize: 12),
                           ),
-
                           const SizedBox(height: 8),
-
                           TextField(
                             controller: emailController,
                             style: const TextStyle(color: Colors.white),
                             decoration: InputDecoration(
                               hintText: "Enter your email",
-                              hintStyle:
-                                  const TextStyle(color: Colors.white54),
+                              hintStyle: const TextStyle(color: Colors.white54),
                               filled: true,
                               fillColor: const Color(0x22FFFFFF),
-                              contentPadding:
-                                  const EdgeInsets.symmetric(horizontal: 16),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16),
                                 borderSide: BorderSide.none,
                               ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(16),
-                                borderSide: const BorderSide(
-                                  color: Color(0xFFD4AF37),
-                                  width: 1.2,
-                                ),
-                              ),
                             ),
                           ),
-
                           const SizedBox(height: 20),
 
+                          // PASSWORD FIELD
                           const Text(
                             "Password",
-                            style: TextStyle(
-                              color: Colors.white70,
-                              fontSize: 12,
-                            ),
+                            style: TextStyle(color: Colors.white70, fontSize: 12),
                           ),
-
                           const SizedBox(height: 8),
-
                           TextField(
                             controller: passwordController,
                             obscureText: hidePassword,
                             style: const TextStyle(color: Colors.white),
                             decoration: InputDecoration(
                               hintText: "Enter your password",
-                              hintStyle:
-                                  const TextStyle(color: Colors.white54),
+                              hintStyle: const TextStyle(color: Colors.white54),
                               filled: true,
                               fillColor: const Color(0x22FFFFFF),
-                              contentPadding:
-                                  const EdgeInsets.symmetric(horizontal: 16),
                               suffixIcon: IconButton(
                                 icon: Icon(
                                   hidePassword
@@ -294,46 +269,32 @@ class _LoginScreenState extends State<LoginScreen>
                                   color: Colors.white70,
                                 ),
                                 onPressed: () {
-                                  setState(() {
-                                    hidePassword = !hidePassword;
-                                  });
+                                  setState(() => hidePassword = !hidePassword);
                                 },
                               ),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16),
                                 borderSide: BorderSide.none,
                               ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(16),
-                                borderSide: const BorderSide(
-                                  color: Color(0xFFD4AF37),
-                                  width: 1.2,
-                                ),
-                              ),
                             ),
                           ),
-
                           const SizedBox(height: 32),
 
+                          // BUTTON SIGN IN
                           GestureDetector(
                             onTapDown: (_) => setState(() => pressed = true),
                             onTapUp: (_) => setState(() => pressed = false),
-                            onTapCancel: () =>
-                                setState(() => pressed = false),
+                            onTapCancel: () => setState(() => pressed = false),
                             onTap: handleLogin,
                             child: AnimatedContainer(
                               duration: const Duration(milliseconds: 120),
-                              transformAlignment: Alignment.center,
                               transform: Matrix4.identity()
-                                ..scale(pressed ? 0.97 : 1),
+                                ..scale(pressed ? 0.97 : 1.0),
                               height: 48,
                               width: double.infinity,
                               decoration: BoxDecoration(
                                 gradient: const LinearGradient(
-                                  colors: [
-                                    Color(0xFFD4AF37),
-                                    Color(0xFFB8962E),
-                                  ],
+                                  colors: [Color(0xFFD4AF37), Color(0xFFB8962E)],
                                 ),
                                 borderRadius: BorderRadius.circular(16),
                                 boxShadow: const [
@@ -349,8 +310,7 @@ class _LoginScreenState extends State<LoginScreen>
                                   "SIGN IN",
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontWeight: FontWeight.w600,
-                                    letterSpacing: 1.1,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ),
